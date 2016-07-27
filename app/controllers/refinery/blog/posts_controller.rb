@@ -2,8 +2,6 @@ module Refinery
   module Blog
     class PostsController < BlogController
 
-      caches_page :index, :unless => proc {|c| c.refinery_user_signed_in? || c.flash.any? || params[:page].present? }
-
       before_filter :find_all_blog_posts, :except => [:archive]
       before_filter :find_blog_post, :only => [:show, :comment, :update_nav]
       before_filter :find_tags
@@ -23,7 +21,7 @@ module Refinery
         @comment = Comment.new
 
         @canonical = refinery.url_for(:locale => Refinery::I18n.current_frontend_locale) if canonical?
-        
+
         @post.increment!(:access_count, 1)
 
         respond_with (@post) do |format|
